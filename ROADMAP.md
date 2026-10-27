@@ -85,10 +85,11 @@ Status legend: `[ ]` not started · `[~]` in progress · `[x]` done · `[!]` blo
 These are pure-Python business rules from SPEC.md that have no external dependency (no AWS, no AI) and should be unit-testable in isolation before anything is wired to an API route.
 
 ### T009 — Tax allocation (largest-remainder method)
-- Status: [ ] Not started
+- Status: [x] Done
 - Depends on: T008
 - Goal: Implement the proportional tax allocation algorithm from SPEC.md §11 (and the multi-category note in §8): given a receipt's `tax_total` and a list of items with pre-tax totals, return each item's `allocated_tax_amount` such that the sum exactly equals `tax_total`, using truncate-then-distribute-remainder-by-largest-fraction.
 - Acceptance criteria: Pure function (e.g. `allocate_tax(tax_total: Decimal, item_pretax_totals: list[Decimal]) -> list[Decimal]`), uses `Decimal` throughout (not float) to avoid floating-point drift, unit tests cover: even division, division with remainder, single item, zero tax, more items than cents of tax.
+- Summary: Added `allocate_tax(tax_total, item_pretax_totals)` in `apps/api/src/atomize_api/domain/tax.py` (new `domain` package for pure business rules). It converts to integer cents, computes exact shares with `Fraction` (no float or Decimal rounding anywhere), truncates, and gives the leftover cents one at a time to the largest fractional remainders; ties go to the earlier item, so output is deterministic and always sums exactly to `tax_total`. Beyond the criteria: negative tax with all-negative items is supported (return receipts, SPEC §12); `ValueError` is raised for sub-cent inputs, mixed-sign items, non-zero tax over a zero subtotal, or non-zero tax with no items. Zero tax returns zeros even if the subtotal is zero. 17 unit tests, 100% coverage of the module, covering all cases in the acceptance criteria plus the above. Not wired to anything yet; callers (T019 manual entry, T025) pass pre-tax totals in cents-precision `Decimal`.
 
 ### T010 — Receipt duplicate detection
 - Status: [ ] Not started
