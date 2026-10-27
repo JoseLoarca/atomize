@@ -92,11 +92,12 @@ These are pure-Python business rules from SPEC.md that have no external dependen
 - Summary: Added `allocate_tax(tax_total, item_pretax_totals)` in `apps/api/src/atomize_api/domain/tax.py` (new `domain` package for pure business rules). It converts to integer cents, computes exact shares with `Fraction` (no float or Decimal rounding anywhere), truncates, and gives the leftover cents one at a time to the largest fractional remainders; ties go to the earlier item, so output is deterministic and always sums exactly to `tax_total`. Beyond the criteria: negative tax with all-negative items is supported (return receipts, SPEC §12); `ValueError` is raised for sub-cent inputs, mixed-sign items, non-zero tax over a zero subtotal, or non-zero tax with no items. Zero tax returns zeros even if the subtotal is zero. 17 unit tests, 100% coverage of the module, covering all cases in the acceptance criteria plus the above. Not wired to anything yet; callers (T019 manual entry, T025) pass pre-tax totals in cents-precision `Decimal`.
 
 ### T010 — Receipt duplicate detection
-- Status: [ ] Not started
+- Status: [x] Done
 - Depends on: T008
 - Goal: Implement the duplicate-candidate query from SPEC.md §6 (match on household + merchant_normalized_name + total_amount + transaction_datetime_local + payment_method_label) as a reusable query function, not yet wired to an endpoint.
 - Can run in parallel with T009.
 - Acceptance criteria: Function returns the matching existing receipt(s), if any, given a candidate receipt's fields. Unit-tested against a seeded in-memory/test DB.
+- Summary: Added `find_duplicate_receipts(db, *, household_id, merchant_normalized_name, total_amount, transaction_datetime_local, payment_method_label) -> list[Receipt]` in `apps/api/src/atomize_api/domain/duplicates.py`. Exact match on all five fields (household scoping plus the four SPEC §6 fields), oldest first; it never blocks anything, the caller turns matches into the soft warning. The datetime is normalized to UTC before comparing, so the same instant in a different offset still matches regardless of DB. Callers must pass timezone-aware datetimes (a naive one would be read as system-local time). Tests (7 cases, 100% coverage) run against in-memory SQLite with `Base.metadata.create_all`: no match, exact match, multiple matches, each field differing, other household ignored, other-offset match. Matching is exact to the stored instant, not "within the same minute"; if receipts only carry minute precision, truncate before calling.
 
 ### T011 — Merchant → category mapping lookup & correction
 - Status: [ ] Not started
