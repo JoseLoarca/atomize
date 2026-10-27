@@ -15,7 +15,7 @@ jobs:
         working-directory: apps/api
     steps:
       - uses: actions/checkout@v4
-      - uses: astral-sh/setup-uv@v3
+      - uses: astral-sh/setup-uv@v7
         with:
           enable-cache: true
       - run: uv sync --all-extras --dev
@@ -33,7 +33,7 @@ jobs:
       JSII_SILENCE_WARNING_UNTESTED_NODE_VERSION: "1"
     steps:
       - uses: actions/checkout@v4
-      - uses: astral-sh/setup-uv@v3
+      - uses: astral-sh/setup-uv@v7
         with:
           enable-cache: true
       - uses: actions/setup-node@v4
