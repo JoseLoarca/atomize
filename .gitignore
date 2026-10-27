@@ -30,3 +30,15 @@ venv/
 
 # Logs
 *.log
+
+# AWS CDK
+cdk.out/
+.cdk.staging/
+cdk.context.json
+
+# Next.js
+.next/
+out/
+next-env.d.ts
+*.tsbuildinfo
+
