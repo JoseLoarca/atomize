@@ -76,7 +76,7 @@ class ExpenseItem(UUIDPrimaryKeyMixin, CreatedUpdatedAtMixin, Base):
     confidence_score: Mapped[float] = mapped_column(Numeric(5, 4))
     is_low_confidence: Mapped[bool] = mapped_column(Boolean, default=False, server_default="false")
 
-    tags: Mapped[dict | None] = mapped_column(JSON, nullable=True)
+    tags: Mapped[dict[str, str] | None] = mapped_column(JSON, nullable=True)
 
     # §12: item-level returns.
     is_return: Mapped[bool] = mapped_column(Boolean, default=False, server_default="false")

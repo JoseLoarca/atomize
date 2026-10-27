@@ -10,7 +10,9 @@ dependencies = [
 
 [dependency-groups]
 dev = [
+    "mypy>=2.4.0",
     "pytest>=8.4.2",
+    "pytest-cov>=7.1.0",
 ]
 
 [build-system]
@@ -19,3 +21,13 @@ build-backend = "hatchling.build"
 
 [tool.hatch.build.targets.wheel]
 packages = ["stacks"]
+
+[tool.mypy]
+python_version = "3.14"
+strict = true
+
+[tool.coverage.run]
+source = ["stacks"]
+
+[tool.coverage.report]
+show_missing = true

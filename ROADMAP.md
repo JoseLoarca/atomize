@@ -6,7 +6,7 @@ This file is the single source of truth for "what's next." It exists so any agen
 
 1. Find the first task with status `[ ] Not started` whose **Depends on** list is entirely `[x] Done`.
 2. Read its Goal and Acceptance Criteria. Check `docs/SPEC.md` / `docs/DATA_MODEL.md` / `docs/TECH_STACK.md` for the authoritative detail — this file intentionally doesn't restate everything.
-3. Implement it. Commit as you normally would.
+3. Implement it, following `docs/TECH_STACK.md`'s **Coding standards** section for any Python code: full type hints (mypy strict passes), and unit tests covering the new logic as thoroughly as practical — not just enough to pass CI. Run `uv run mypy ...` and `uv run pytest --cov` locally before considering a task done. Commit as you normally would.
 4. Fill in the task's **Summary** with what you actually did (not what you intended to do) — call out any deviation from the Goal/Acceptance Criteria and why, and note anything the next agent needs to know.
 5. Flip its status to `[x] Done`.
 6. If implementing it reveals new tasks that need to happen, add them to the roadmap in the right place rather than leaving them as an undocumented side effect.

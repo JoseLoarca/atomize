@@ -23,8 +23,12 @@ uv run alembic revision --autogenerate -m "description"
 uv run alembic upgrade head
 ```
 
-## Tests
+## Tests, types, lint
 
 ```bash
-uv run pytest
+uv run pytest --cov   # unit tests + coverage report
+uv run mypy src/ tests/
+uv run ruff check .
 ```
+
+All three run in CI (see [docs/TECH_STACK.md](../../docs/TECH_STACK.md)'s Coding standards section: full type hints everywhere, checked with mypy in strict mode, and unit tests aiming for as much coverage as practical).

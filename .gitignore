@@ -27,6 +27,11 @@ __pycache__/
 *.pyc
 .venv/
 venv/
+.coverage
+.coverage.*
+htmlcov/
+.mypy_cache/
+.pytest_cache/
 
 # Logs
 *.log

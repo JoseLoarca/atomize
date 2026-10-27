@@ -12,11 +12,14 @@ uv sync
 ## Useful commands
 
 ```bash
-uv run pytest             # unit tests against the synthesized template
+uv run pytest --cov       # unit tests + coverage, against the synthesized template
+uv run mypy app.py stacks/ tests/
 cdk synth                 # emit the CloudFormation template
 cdk diff                  # compare deployed stack with current state
 cdk deploy                # deploy to your default AWS account/region
 ```
+
+Per [docs/TECH_STACK.md](../docs/TECH_STACK.md)'s Coding standards section, all code here is fully type-hinted and checked with mypy in strict mode; both commands run in CI.
 
 `cdk.json` invokes the app via `uv run python app.py`, so the CDK CLI picks up this project's uv-managed virtualenv automatically.
 

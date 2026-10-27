@@ -20,7 +20,8 @@ jobs:
           enable-cache: true
       - run: uv sync --all-extras --dev
       - run: uv run ruff check .
-      - run: uv run pytest
+      - run: uv run mypy src/ tests/
+      - run: uv run pytest --cov
 
   infra:
     name: Infra (tests + cdk synth)
@@ -40,7 +41,8 @@ jobs:
           node-version: "22"
       - run: npm install -g aws-cdk
       - run: uv sync --all-extras --dev
-      - run: uv run pytest
+      - run: uv run mypy app.py stacks/ tests/
+      - run: uv run pytest --cov
       - run: cdk synth --quiet
 
   web:

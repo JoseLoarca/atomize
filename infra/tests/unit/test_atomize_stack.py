@@ -4,7 +4,7 @@ import aws_cdk.assertions as assertions
 from stacks.atomize_stack import AtomizeStack
 
 
-def test_stack_synthesizes_core_resources():
+def test_stack_synthesizes_core_resources() -> None:
     app = core.App()
     stack = AtomizeStack(app, "atomize-test")
     template = assertions.Template.from_stack(stack)

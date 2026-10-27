@@ -29,6 +29,13 @@ Web-first now, native mobile later — so the API layer is kept decoupled from t
 - **S3 lifecycle rule does real work.** SPEC §19's "delete receipt images after 6 months" isn't just a note — it maps to an actual S3 bucket lifecycle policy, enforced by AWS rather than a custom cron job. A small Lambda still needs to listen for the deletion event to flip `receipt.image_deleted_at` in Postgres so the UI reflects it.
 - **Textract + Bedrock split.** Textract is purpose-built (and cheap/free-tier) for pulling raw text and table structure off a receipt image; Bedrock (Claude) is then used for the judgment-call part — deciding what's an item vs. a tax line, assigning categories, scoring confidence — which is exactly the split SPEC §20 draws between "parsing" and "classification."
 
+## Coding standards
+
+These apply to all Python code in the repo (`apps/api`, `infra`) and are enforced in CI, not just suggested:
+
+- **Full type hints, checked with mypy in strict mode.** Every function signature (parameters and return type) must be typed — this includes test functions (`-> None`). `[tool.mypy] strict = true` is set in both `apps/api/pyproject.toml` and `infra/pyproject.toml`; CI runs `mypy` as a required check alongside `ruff`.
+- **Aim for as much unit test coverage as possible.** `pytest-cov` is wired into both projects (`uv run pytest --cov`) and runs in CI so coverage is visible on every PR. There's no hard-enforced minimum percentage yet — the domain logic landing in ROADMAP.md's Phase 2 (tax allocation, dedup detection, merchant mapping, audit logging, confidence thresholding) is pure, dependency-free Python and should be close to fully covered by design, since each of those is written as a small testable function specifically so this is achievable. Revisit adding a `--cov-fail-under` threshold once that logic exists — it's not meaningful to gate on a number yet when most of the codebase is still scaffolding/models.
+
 ## Known tradeoffs to revisit later
 
 - RDS cost after the 12-month free tier — fine for now, but worth re-checking Aurora Serverless v2 (scales to near-zero, no free tier either) if cost becomes a concern at that point.
