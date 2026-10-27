@@ -4,6 +4,7 @@ Household expense tracking that uses AI to parse receipts down to the line-item 
 
 ## Docs
 
+- [ROADMAP.md](ROADMAP.md) — sequential task breakdown; start here to pick up work
 - [docs/SPEC.md](docs/SPEC.md) — product spec (v1)
 - [docs/DATA_MODEL.md](docs/DATA_MODEL.md) — relational data model
 - [docs/TECH_STACK.md](docs/TECH_STACK.md) — tech stack and infrastructure choices
@@ -23,4 +24,4 @@ Each app directory has its own README with setup instructions.
 
 ## Status
 
-Early scaffold — data model and infra are defined, but the app has no real endpoints or UI yet.
+Early scaffold — data model and infra are defined, but the app has no real endpoints or UI yet. See [ROADMAP.md](ROADMAP.md) for what's next.
