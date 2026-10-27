@@ -1,0 +1,21 @@
+# Local Postgres for development. Matches DATABASE_URL in apps/api/.env.example.
+# If host port 5432 is taken, set ATOMIZE_DB_PORT=5433 and adjust DATABASE_URL to match.
+services:
+  db:
+    image: postgres:17
+    environment:
+      POSTGRES_USER: atomize
+      POSTGRES_PASSWORD: atomize
+      POSTGRES_DB: atomize
+    ports:
+      - "${ATOMIZE_DB_PORT:-5432}:5432"
+    volumes:
+      - atomize-pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U atomize -d atomize"]
+      interval: 2s
+      timeout: 3s
+      retries: 15
+
+volumes:
+  atomize-pgdata:

@@ -61,7 +61,7 @@ Status legend: `[ ]` not started · `[~]` in progress · `[x]` done · `[!]` blo
 ## Phase 1 — Database foundation
 
 ### T007 — Initial Alembic migration
-- Status: [ ] Not started
+- Status: [x] Done
 - Depends on: T006
 - Goal: Generate and commit the first real Alembic migration from the SQLAlchemy models in `apps/api/src/atomize_api/models/`, and get it applying cleanly against a local Postgres (via Docker Compose, not SQLite — SQLite was only used earlier as a quick DDL smoke test and doesn't enforce the same constraints Postgres will).
 - Acceptance criteria:
@@ -69,6 +69,7 @@ Status legend: `[ ]` not started · `[~]` in progress · `[x]` done · `[!]` blo
   - `uv run alembic revision --autogenerate -m "initial schema"` produces a migration covering all 15 tables, FKs, uniques, and enums.
   - `uv run alembic upgrade head` succeeds against the local Postgres.
   - `uv run alembic downgrade base` succeeds (round-trips cleanly).
+- Summary: Added `docker-compose.yml` at the repo root (Postgres 17, credentials matching `.env.example`; host port overridable via `ATOMIZE_DB_PORT` because 5432 is often already taken locally). Generated `apps/api/alembic/versions/575b68b0f294_initial_schema.py` via autogenerate: all 15 tables plus the three native enums (`audit_changed_by`, `audit_entity_type`, `household_role`), with FKs and uniques. Deviation from raw autogenerate output: `downgrade()` now also drops the enum types (autogenerate leaves them behind, which made `upgrade → downgrade → upgrade` fail), and the file was run through `ruff --fix` so it passes CI lint. Verified against local Postgres: `upgrade head`, `check` (no drift), `downgrade base` (no tables or types left), `upgrade head` again. No automated test was added since CI has no Postgres service; adding one would be a reasonable follow-up. To run locally: `docker compose up -d --wait` from repo root, then `cd apps/api && uv run alembic upgrade head`.
 
 ### T008 — Seed the canonical category list
 - Status: [ ] Not started
