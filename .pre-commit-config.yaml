@@ -1,0 +1,45 @@
+# See https://pre-commit.com for usage. Install once per clone:
+#   uv tool install pre-commit --with pre-commit-uv
+#   pre-commit install
+#
+# Hooks mirror the checks CI runs (.github/workflows/ci.yml), so issues are
+# caught before a commit even reaches a PR instead of only in CI.
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v5.0.0
+    hooks:
+      - id: trailing-whitespace
+      - id: end-of-file-fixer
+      - id: check-merge-conflict
+      - id: check-added-large-files
+        args: ["--maxkb=1024"]
+
+  - repo: local
+    hooks:
+      - id: api-ruff
+        name: api - ruff
+        entry: bash -c 'cd apps/api && uv run ruff check .'
+        language: system
+        files: ^apps/api/
+        pass_filenames: false
+
+      - id: api-mypy
+        name: api - mypy
+        entry: bash -c 'cd apps/api && uv run mypy src/ tests/'
+        language: system
+        files: ^apps/api/
+        pass_filenames: false
+
+      - id: infra-mypy
+        name: infra - mypy
+        entry: bash -c 'cd infra && uv run mypy app.py stacks/ tests/'
+        language: system
+        files: ^infra/
+        pass_filenames: false
+
+      - id: web-lint
+        name: web - eslint
+        entry: bash -c 'cd apps/web && npm run lint'
+        language: system
+        files: ^apps/web/
+        pass_filenames: false

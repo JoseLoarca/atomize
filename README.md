@@ -5,6 +5,7 @@ Household expense tracking that uses AI to parse receipts down to the line-item 
 ## Docs
 
 - [ROADMAP.md](ROADMAP.md) — sequential task breakdown; start here to pick up work
+- [CONTRIBUTING.md](CONTRIBUTING.md) — branching, PRs, local checks
 - [docs/SPEC.md](docs/SPEC.md) — product spec (v1)
 - [docs/DATA_MODEL.md](docs/DATA_MODEL.md) — relational data model
 - [docs/TECH_STACK.md](docs/TECH_STACK.md) — tech stack and infrastructure choices

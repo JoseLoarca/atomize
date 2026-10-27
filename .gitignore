@@ -46,4 +46,3 @@ cdk.context.json
 out/
 next-env.d.ts
 *.tsbuildinfo
-
