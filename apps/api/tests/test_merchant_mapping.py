@@ -13,7 +13,7 @@ from atomize_api.domain.merchant_mapping import (
     get_default_category_for_merchant,
     set_merchant_category_mapping,
 )
-from atomize_api.models import Category, MerchantCategoryMapping, Receipt
+from atomize_api.models import AuditLogEntry, Category, MerchantCategoryMapping, Receipt
 
 HOUSEHOLD = uuid.uuid4()
 USER = uuid.uuid4()
@@ -100,3 +100,18 @@ def test_correction_does_not_touch_existing_receipts(db: Session) -> None:
     assert receipt.single_category_id == gas.id
     new_default = get_default_category_for_merchant(db, HOUSEHOLD, "costco")
     assert new_default is not None and new_default.id == groceries.id
+
+
+def test_changes_are_audited(db: Session) -> None:
+    gas = _category(db, "Gas")
+    groceries = _category(db, "Groceries")
+    mapping = set_merchant_category_mapping(db, HOUSEHOLD, "costco", gas.id, USER)
+    set_merchant_category_mapping(db, HOUSEHOLD, "costco", gas.id, USER)  # no-op, no entry
+    set_merchant_category_mapping(db, HOUSEHOLD, "costco", groceries.id, USER)
+    entries = list(db.scalars(select(AuditLogEntry).order_by(AuditLogEntry.changed_at, AuditLogEntry.new_value)))
+    assert len(entries) == 2
+    assert {(e.old_value, e.new_value) for e in entries} == {
+        (None, str(gas.id)),
+        (str(gas.id), str(groceries.id)),
+    }
+    assert all(e.entity_id == mapping.id and e.changed_by_user_id == USER for e in entries)
