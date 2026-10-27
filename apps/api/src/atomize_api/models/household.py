@@ -23,8 +23,8 @@ class Household(UUIDPrimaryKeyMixin, CreatedAtMixin, Base):
     home_timezone: Mapped[str] = mapped_column(String(64))
     currency: Mapped[str] = mapped_column(String(3), default="USD", server_default="USD")
 
-    memberships: Mapped[list["HouseholdMembership"]] = relationship(back_populates="household")
-    invites: Mapped[list["HouseholdInvite"]] = relationship(back_populates="household")
+    memberships: Mapped[list[HouseholdMembership]] = relationship(back_populates="household")
+    invites: Mapped[list[HouseholdInvite]] = relationship(back_populates="household")
 
 
 class User(UUIDPrimaryKeyMixin, CreatedAtMixin, Base):
@@ -33,7 +33,7 @@ class User(UUIDPrimaryKeyMixin, CreatedAtMixin, Base):
     email: Mapped[str] = mapped_column(String(320), unique=True)
     name: Mapped[str] = mapped_column(String(255))
 
-    memberships: Mapped[list["HouseholdMembership"]] = relationship(back_populates="user")
+    memberships: Mapped[list[HouseholdMembership]] = relationship(back_populates="user")
 
 
 class HouseholdMembership(UUIDPrimaryKeyMixin, Base):
@@ -44,8 +44,8 @@ class HouseholdMembership(UUIDPrimaryKeyMixin, Base):
     user_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("user.id"))
     role: Mapped[HouseholdRole] = mapped_column(Enum(HouseholdRole, name="household_role"))
 
-    household: Mapped["Household"] = relationship(back_populates="memberships")
-    user: Mapped["User"] = relationship(back_populates="memberships")
+    household: Mapped[Household] = relationship(back_populates="memberships")
+    user: Mapped[User] = relationship(back_populates="memberships")
 
 
 class HouseholdInvite(UUIDPrimaryKeyMixin, CreatedAtMixin, Base):
@@ -58,4 +58,4 @@ class HouseholdInvite(UUIDPrimaryKeyMixin, CreatedAtMixin, Base):
     created_by_user_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("user.id"))
     revoked_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
 
-    household: Mapped["Household"] = relationship(back_populates="invites")
+    household: Mapped[Household] = relationship(back_populates="invites")

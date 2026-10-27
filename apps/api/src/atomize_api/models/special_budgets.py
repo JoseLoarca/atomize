@@ -19,7 +19,7 @@ class SpecialBudget(UUIDPrimaryKeyMixin, CreatedAtMixin, Base):
     end_date: Mapped[date] = mapped_column(Date)
     pacing_enabled_default: Mapped[bool] = mapped_column(Boolean, default=True, server_default="true")
 
-    estimates: Mapped[list["SpecialBudgetEstimate"]] = relationship(back_populates="special_budget")
+    estimates: Mapped[list[SpecialBudgetEstimate]] = relationship(back_populates="special_budget")
 
 
 class SpecialBudgetEstimate(UUIDPrimaryKeyMixin, Base):
@@ -30,4 +30,4 @@ class SpecialBudgetEstimate(UUIDPrimaryKeyMixin, Base):
     estimate_min: Mapped[float] = mapped_column(Numeric(12, 2))
     estimate_max: Mapped[float] = mapped_column(Numeric(12, 2))
 
-    special_budget: Mapped["SpecialBudget"] = relationship(back_populates="estimates")
+    special_budget: Mapped[SpecialBudget] = relationship(back_populates="estimates")

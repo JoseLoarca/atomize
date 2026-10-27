@@ -125,7 +125,7 @@ class AtomizeStack(Stack):
         api_handler = lambda_.Function(
             self,
             "ApiHandler",
-            runtime=lambda_.Runtime.PYTHON_3_12,
+            runtime=lambda_.Runtime.PYTHON_3_14,
             handler="index.handler",
             code=lambda_.Code.from_inline(
                 "def handler(event, context):\n"
@@ -152,7 +152,7 @@ class AtomizeStack(Stack):
         month_close_handler = lambda_.Function(
             self,
             "MonthCloseLedgerHandler",
-            runtime=lambda_.Runtime.PYTHON_3_12,
+            runtime=lambda_.Runtime.PYTHON_3_14,
             handler="index.handler",
             code=lambda_.Code.from_inline(
                 "def handler(event, context):\n"

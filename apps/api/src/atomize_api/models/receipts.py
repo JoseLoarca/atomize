@@ -52,7 +52,7 @@ class Receipt(UUIDPrimaryKeyMixin, CreatedUpdatedAtMixin, Base):
 
     created_by_user_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("user.id"))
 
-    items: Mapped[list["ExpenseItem"]] = relationship(back_populates="receipt")
+    items: Mapped[list[ExpenseItem]] = relationship(back_populates="receipt")
 
 
 class ExpenseItem(UUIDPrimaryKeyMixin, CreatedUpdatedAtMixin, Base):
@@ -82,4 +82,4 @@ class ExpenseItem(UUIDPrimaryKeyMixin, CreatedUpdatedAtMixin, Base):
     is_return: Mapped[bool] = mapped_column(Boolean, default=False, server_default="false")
     original_item_id: Mapped[uuid.UUID | None] = mapped_column(ForeignKey("expense_item.id"), nullable=True)
 
-    receipt: Mapped["Receipt"] = relationship(back_populates="items")
+    receipt: Mapped[Receipt] = relationship(back_populates="items")

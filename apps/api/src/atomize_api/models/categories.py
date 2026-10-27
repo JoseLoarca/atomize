@@ -40,4 +40,4 @@ class MerchantCategoryMapping(UUIDPrimaryKeyMixin, Base):
         DateTime(timezone=True), server_default=func.now(), onupdate=func.now()
     )
 
-    category: Mapped["Category"] = relationship()
+    category: Mapped[Category] = relationship()
