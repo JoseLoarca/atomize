@@ -6,10 +6,11 @@ This file is the single source of truth for "what's next." It exists so any agen
 
 1. Find the first task with status `[ ] Not started` whose **Depends on** list is entirely `[x] Done`.
 2. Read its Goal and Acceptance Criteria. Check `docs/SPEC.md` / `docs/DATA_MODEL.md` / `docs/TECH_STACK.md` for the authoritative detail — this file intentionally doesn't restate everything.
-3. Implement it, following `docs/TECH_STACK.md`'s **Coding standards** section for any Python code: full type hints (mypy strict passes), and unit tests covering the new logic as thoroughly as practical — not just enough to pass CI. Run `uv run mypy ...` and `uv run pytest --cov` locally before considering a task done. Commit as you normally would.
-4. Fill in the task's **Summary** with what you actually did (not what you intended to do) — call out any deviation from the Goal/Acceptance Criteria and why, and note anything the next agent needs to know.
-5. Flip its status to `[x] Done`.
-6. If implementing it reveals new tasks that need to happen, add them to the roadmap in the right place rather than leaving them as an undocumented side effect.
+3. Create a branch per `CONTRIBUTING.md`'s naming convention (e.g. `feat/t007-initial-migration`) — `main` is protected, direct pushes are rejected.
+4. Implement it, following `docs/TECH_STACK.md`'s **Coding standards** section for any Python code: full type hints (mypy strict passes), and unit tests covering the new logic as thoroughly as practical — not just enough to pass CI. Run `uv run mypy ...` and `uv run pytest --cov` locally before considering a task done.
+5. Fill in the task's **Summary** with what you actually did (not what you intended to do) — call out any deviation from the Goal/Acceptance Criteria and why, and note anything the next agent needs to know. Flip its status to `[x] Done`. Include this ROADMAP.md update in the same PR, not a follow-up.
+6. Push the branch and open a PR using `.github/pull_request_template.md`. All three CI checks must pass before it can merge (branch protection enforces this); merge it yourself once green — no human approval is required (`required_approving_review_count: 0`), but a PR is.
+7. If implementing it reveals new tasks that need to happen, add them to the roadmap in the right place rather than leaving them as an undocumented side effect.
 
 Tasks are listed in the order they should be done. A task's **Depends on** field is the real constraint — most tasks are strictly sequential because they build on the same code, but where two tasks are genuinely independent it's called out explicitly ("Can run in parallel with T#").
 
